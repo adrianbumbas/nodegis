@@ -5,18 +5,20 @@ It returns all the entries with their latitude and longitute coordinates from th
 
 The URL format is:
 
-```/places/${srid}/${sw_lng}/${sw_lat}/${ne_lng}/${ne_lat}
+    
+    /places/${srid}/${sw_lng}/${sw_lat}/${ne_lng}/${ne_lat}
+    
 
 Where:
-    ```
+    
     srid - Spatial Reference System Identifier (4326 for Google Maps)
     sw_lng - The longitude of the viewport's SouthWest corner
     sw_lat - The latitude of the viewport's SouthWest corner
     ne_lng - The longitude of the viewport's NorthEast corner
     ne_lat - The latitude of the viewport's NorthEast corner
-    ```
+    
 It retuns the following JSON response:
-    ```
+    
     {
        "response":[
           {
@@ -27,4 +29,3 @@ It retuns the following JSON response:
           ...
        ]
     }
-    ```
