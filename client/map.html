@@ -38,7 +38,7 @@
                             type: "GET",
                             cache: false,
                             async: true,
-                            url: "http://amonsoftware.com:1337/places/4326/" + sw.lng() + "/" + sw.lat() + "/" + ne.lng() + "/" + ne.lat(),
+                            url: "http://localhost:1337/places/4326/" + sw.lng() + "/" + sw.lat() + "/" + ne.lng() + "/" + ne.lat(),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
 
@@ -47,10 +47,7 @@
                                     map.addMarker({
                                         lat: item.lat,
                                         lng: item.lng,
-                                        title: item.name,
-                                        click: function(e) {
-                                            alert('You clicked in this marker');
-                                        },
+                                        title: item.name
                                     })
                                 });
                             },
