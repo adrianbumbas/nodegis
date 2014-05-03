@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <style type="text/css">
+            html {
+                height: 100%
+            }
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0
+            }
+            #map {
+                height: 100%
+            }
+        </style>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChqGsDLRso-Zob7mKgFxGltq1X5TM9djU&sensor=false"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://hpneo.github.io/gmaps/gmaps.js"></script>
+        <script type="text/javascript">
+            var map;
+            $(document).ready(function() {
+                map = new GMaps({
+                    div: '#map',
+                    zoom: 3,
+                    lat: 0,
+                    lng: 0,
+
+                    idle: function(e) {
+                        var bounds = map.getBounds();
+                        var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+                        var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+
+                        map.removeMarkers();
+
+                        $.support.cors = true;
+                        $.ajax({
+                            type: "GET",
+                            cache: false,
+                            async: true,
+                            url: "http://amonsoftware.com:1337/places/4326/" + sw.lng() + "/" + sw.lat() + "/" + ne.lng() + "/" + ne.lat(),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+
+                            success: function(data) {
+                                $.each(data.response, function(index, item) {
+                                    map.addMarker({
+                                        lat: item.lat,
+                                        lng: item.lng,
+                                        title: item.name,
+                                        click: function(e) {
+                                            alert('You clicked in this marker');
+                                        },
+                                    })
+                                });
+                            },
+                            error: function(msg, url, line) {
+                                console.log(msg);
+                            }
+                        });
+                    }
+                });
+
+            });
+        </script>
+    </head>
+    
+    <body>
+        <div id="map" />
+    </body>
+
+</html>

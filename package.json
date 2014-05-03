@@ -1,0 +1,16 @@
+{
+  "name": "nodegis",
+  "version": "0.0.1",
+  "description": "Simple geolocation service based on PostGIS and Node.js",
+  "main": "server.js",
+  "repository": "",
+  "author": "Adrian Bumbas",
+  "dependencies": {
+    "express": "~4.0.0",
+    "pg": "~3.0.1",
+    "cluster": "~0.2.0"
+  },
+  "scripts": {
+    "test": "mocha -R spec ./test/test.js"
+  }
+}
