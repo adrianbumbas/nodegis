@@ -12,6 +12,8 @@ var numCPUs = require('os').cpus().length;
 var router = express();
 var server = http.createServer(router);
 
+router.use(express.static(__dirname + '/client'));
+
 //create one process for each CPU core
 if (cluster.isMaster) {
     for (var i = 0; i < numCPUs; i++) {

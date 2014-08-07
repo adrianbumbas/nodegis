@@ -29,3 +29,7 @@ It returns the following JSON response:
           ...
        ]
     }
+    
+The client is available at:
+
+	http://localhost:1337/map.html
