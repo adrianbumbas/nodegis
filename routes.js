@@ -1,5 +1,6 @@
 var pg = require('pg');
 var config = require('./config');
+var geocode = require('./routes/geocoding');
 var connectionString = 'postgres://' + config.db.username + ':' + config.db.password + '@' + config.db.host + '/' + config.db.database;
 
 function coordinates(app) {
@@ -56,6 +57,8 @@ function coordinates(app) {
         });
 
     });
+
+    app.get('/geocode', geocode.controller);
 }
 
 exports.coordinates = coordinates;
