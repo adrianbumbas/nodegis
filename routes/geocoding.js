@@ -37,7 +37,7 @@ exports.controller = function (req, res, next) {
       + " (addy).address As street_no, (addy).predirAbbrev pre_address_abbrev, (addy).streetname As street_name, "
       + " (addy).postdirAbbrev post_address_abbrev, (addy).streettypeabbrev As street_type_abbrev, (addy).internal, "
       + " (addy).location As city, (addy).stateabbrev As state, (addy).zip, pprint_addy(addy) pretty "
-      + "FROM geocode($1) As g where rating < 5", [req.query.address], function(err) {
+      + "FROM geocode($1) As g where rating < 5 order by rating asc", [req.query.address], function(err) {
       //return the db connection to the connection pool
       done();
       if (handleError(err, res)) {
@@ -58,6 +58,7 @@ exports.controller = function (req, res, next) {
         "lon": row.lon,
         "lat": row.lat,
         "pretty": row.pretty,
+        "rating": row.rating,
         "address": {
           street_no: row.street_no,
           pre_address_abbrev: row.pre_address_abbrev,
