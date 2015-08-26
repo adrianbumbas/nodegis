@@ -22,7 +22,7 @@ var handleError = function(err, res, client) {
 // expects *address* querystring parameter,
 // if optional *limit* param is passed, it's used to limit the query to the state passed in the param
 // sample query:
-//  http://localhost:1337/geocode?address=425%20se%2011th%20ave%20portland%20or&limit_state=OR
+//  http://localhost:1337/geocode?address=425%20se%2011th%20ave%20portland%20or&limit=OR
 exports.controller = function (req, res, next) {
   var dt = +new Date();
   pg.connect(connectionString, function(err, client, done) {
