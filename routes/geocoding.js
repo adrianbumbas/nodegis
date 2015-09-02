@@ -19,7 +19,10 @@ var handleError = function(err, res, client) {
   return true;
 };
 
-// expects *address* querystring parameter
+// expects *address* querystring parameter,
+// if optional *limit* param is passed, it's used to limit the query to the state passed in the param
+// sample query:
+//  http://localhost:1337/geocode?address=425%20se%2011th%20ave%20portland%20or&limit=OR
 exports.controller = function (req, res, next) {
   var dt = +new Date();
   pg.connect(connectionString, function(err, client, done) {
@@ -31,13 +34,7 @@ exports.controller = function (req, res, next) {
       return;
     }
 
-    //using prepared statement to avoid SQL injection
-    var result = client.query(
-      "SELECT g.rating, ST_X(g.geomout) As lon, ST_Y(g.geomout) As lat,"
-      + " (addy).address As street_no, (addy).predirAbbrev pre_address_abbrev, (addy).streetname As street_name, "
-      + " (addy).postdirAbbrev post_address_abbrev, (addy).streettypeabbrev As street_type_abbrev, (addy).internal, "
-      + " (addy).location As city, (addy).stateabbrev As state, (addy).zip, pprint_addy(addy) pretty "
-      + "FROM geocode($1) As g where rating < 5 order by rating asc", [req.query.address], function(err) {
+    var handler = function(err) {
       //return the db connection to the connection pool
       done();
       if (handleError(err, res)) {
@@ -45,8 +42,28 @@ exports.controller = function (req, res, next) {
           done(client);
         }
       }
-    });
+    };
 
+    //using prepared statement to avoid SQL injection
+    var result = null;
+    if (req.query.limit) {
+      result = client.query(
+        "SELECT g.rating, ST_X(g.geomout) As lon, ST_Y(g.geomout) As lat,"
+        + " (addy).address As street_no, (addy).predirAbbrev pre_address_abbrev, (addy).streetname As street_name, "
+        + " (addy).postdirAbbrev post_address_abbrev, (addy).streettypeabbrev As street_type_abbrev, (addy).internal, "
+        + " (addy).location As city, (addy).stateabbrev As state, (addy).zip, pprint_addy(addy) pretty "
+        + " FROM tiger.state state"
+        + " JOIN geocode($1, 5, state.the_geom) As g on 1=1"
+        + " WHERE state.stusps = $2 and rating < 5 order by rating asc", [req.query.address, req.query.limit], handler);
+    }
+    else {
+      result = client.query(
+        "SELECT g.rating, ST_X(g.geomout) As lon, ST_Y(g.geomout) As lat,"
+        + " (addy).address As street_no, (addy).predirAbbrev pre_address_abbrev, (addy).streetname As street_name, "
+        + " (addy).postdirAbbrev post_address_abbrev, (addy).streettypeabbrev As street_type_abbrev, (addy).internal, "
+        + " (addy).location As city, (addy).stateabbrev As state, (addy).zip, pprint_addy(addy) pretty "
+        + "FROM geocode($1) As g where rating < 5 order by rating asc", [req.query.address], handler);
+    }
     var json = {
       results: [],
       status: 'OK'

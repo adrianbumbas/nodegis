@@ -12,5 +12,10 @@
   },
   "scripts": {
     "test": "mocha -R spec ./test/test.js"
+  },
+  "devDependencies": {
+    "should": "^7.0.4",
+    "should-http": "0.0.4",
+    "supertest": "^1.1.0"
   }
 }
