@@ -28,7 +28,7 @@ function coordinates(app) {
             };
             if (handleError(err)) return;
             //using prepared statement to avoid SQL injection
-            var result = client.query('SELECT name, ST_X(geom) as lng, ST_Y(geom) as lat FROM airports where ST_Contains(ST_MakeEnvelope($1, $2, $3, $4, $5),ST_SetSRID(geom,$5))', [req.params.neLat, req.params.neLng, req.params.swLat, req.params.swLng, req.params.srid], function(err) {
+            var result = client.query('SELECT name, ST_X(geom) as lng, ST_Y(geom) as lat FROM topology.airports where ST_Contains(ST_MakeEnvelope($1, $2, $3, $4, $5),ST_SetSRID(geom,$5))', [req.params.neLat, req.params.neLng, req.params.swLat, req.params.swLng, req.params.srid], function(err) {
                 //return the db connection to the connection pool
                 done();
                 if (handleError(err)) return;
