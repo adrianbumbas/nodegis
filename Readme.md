@@ -35,6 +35,10 @@ It returns the following JSON response:
 The client is available at:
 
 	http://localhost:1337/map.html
+	
+### Setup
+Load initial data from [data/import.html](https://github.com/adrianbumbas/nodegis/blob/master/data/import.sql)
+[Source of the data](http://www.naturalearthdata.com/downloads/10m-cultural-vectors/airports/)
 
 ## Geocode
 
